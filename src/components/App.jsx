@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import css from './App.module.css';
 
 import {searchForImage} from "../api/gallery-api"
@@ -12,19 +12,21 @@ import { Modal } from './Modal/Modal';
 import Notiflix from 'notiflix';
 
 
-export class App extends Component {
-  state = {
-    images: [],
-    query: '',
-    page: 1,
-    isLoading: false,
-    isMore: false,
-    isModal: false,
-    modalImage: {},
-    error: false,
-  };
+export const App = ()=> {
 
-  async componentDidUpdate(prevProps, prevState) {
+  const [images, setImages] = useState([])
+  const [query, setQuery] = useState("")
+  const [page, setPage] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isMore, setIsMore] = useState(false)
+  const [isModal, setIsModal] = useState(false)
+  const [modalImage, setModalImage] = useState({})
+  const [error, setError] = useState(false)
+
+
+
+
+  async function componentDidUpdate(prevProps, prevState) {
     const { page, query } = this.state;
     const perPage = 12;
     if (this.state.query === '') {
@@ -76,7 +78,7 @@ export class App extends Component {
     }
   }
 
-  onSubmit = query => {
+  const onSubmit = query => {
     this.setState({
       query: query,
       page: 1,
@@ -84,20 +86,20 @@ export class App extends Component {
     });
   };
 
-  onLoadMore = () => {
+ const onLoadMore = () => {
     this.setState(prevState => {
       return { page: prevState.page + 1,
       isMore: false };
     });
   };
 
-  showModalImage = image => {
+  const showModalImage = image => {
     this.setState({
       modalImage: image,
       isModal: true,
     });
   };
-    closeModal = e => {
+    const closeModal = e => {
       this.setState({
         modalImage: {},
         isModal: false,
@@ -105,22 +107,22 @@ export class App extends Component {
 
   }
 
-  render() {
+
     return (
       <div className={css.app}>
-        <Searchbar onSubmit={this.onSubmit} />
-        {this.state.images.length !==0  && (
+        <Searchbar onSubmit={onSubmit} />
+        {images.length !==0  && (
           <ImageGallery
-            images={this.state.images}
-            showModalImage={this.showModalImage}
+            images={images}
+            showModalImage={showModalImage}
           />
         )}
-        {this.state.isLoading && <Loader />}
-        {this.state.isMore && <Button onLoadMore={this.onLoadMore} />}
-        {this.state.isModal && (
-          <Modal largeImage={this.state.modalImage} onClose={this.closeModal} />
+        {isLoading && <Loader />}
+        {isMore && <Button onLoadMore={onLoadMore} />}
+        {isModal && (
+          <Modal largeImage={modalImage} onClose={closeModal} />
         )}
       </div>
     );
   }
-}
+
