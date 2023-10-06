@@ -1,27 +1,25 @@
 import css from './Modal.module.css';
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 
-export const Modal = ({onClose, largeImage}) =>  {
-
-  useEffect(()=>{
+export const Modal = ({ onClose, largeImage }) => {
+  useEffect(() => {
     window.addEventListener('keydown', onClose);
 
-    return()=>{
+    return () => {
       window.removeEventListener('keydown', onClose);
-    }
-  },[onClose])
+    };
+  }, [onClose]);
 
- const handleClick = e =>{
+  const handleClick = e => {
     if (e.target.nodeName === 'DIV' || e.code === 'Escape') {
-    onClose()
+      onClose();
     }
-  }
-    return (
-      <div className={css.overlay} onClick={handleClick}>
-        <div className={css.modal}>
-          <img className={css.modalImage} src={largeImage} alt="" />
-        </div>
+  };
+  return (
+    <div className={css.overlay} onClick={handleClick}>
+      <div className={css.modal}>
+        <img className={css.modalImage} src={largeImage} alt="" />
       </div>
-    );
-  }
-
+    </div>
+  );
+};
